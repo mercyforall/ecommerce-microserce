@@ -1,0 +1,39 @@
+apiVersion: apps/v1   # User Service Deployment and Service Configuration
+kind: Deployment      # User Service Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1         # Number of replicas for user-service
+  selector:
+    matchLabels:
+      # Selector for user-service
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service      # Labels for user-service       
+    spec:
+      containers:
+        - name: user-service    # Name of the container for user-service
+          image: user-service:latest   # Image for user-service
+          ports:
+            - containerPort: 8083
+          resources:         # Added resources section for user-service
+            requests:
+              memory: "128Mi"   # Memory and CPU requests for user-service
+              cpu: "100m"     # CPU requests for user-service
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083

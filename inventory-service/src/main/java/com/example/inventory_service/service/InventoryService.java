@@ -1,8 +1,12 @@
 package com.example.inventory_service.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.inventory_service.dto.InventoryDTO;
 import com.example.inventory_service.model.Inventory;
 import com.example.inventory_service.repository.InventoryRepository;
 
@@ -22,6 +26,11 @@ public class InventoryService {
         InventoryRepository.save(inv);
     }
     
+    public List<InventoryDTO> getAll() {
+        return InventoryRepository.findAll().stream()
+                .map(inv -> new InventoryDTO(inv.getProductId(), inv.getQuantity()))
+                .collect(Collectors.toList());
+    }
 
 
 }
